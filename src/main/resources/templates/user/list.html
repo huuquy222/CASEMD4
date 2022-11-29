@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>CP Index</title>
+<!--    <link href="/assets/libs/datatables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="/assets/libs/datatables/responsive.bootstrap4.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="/assets/libs/datatables/buttons.bootstrap4.css" rel="stylesheet" type="text/css">-->
+<!--    <link href="/assets/libs/datatables/select.bootstrap4.css" rel="stylesheet" type="text/css">-->
+
+    <th:block th:replace="/layout/head :: head"/>
+</head>
+
+<body>
+
+<!-- Begin page -->
+<div id="wrapper">
+
+    <!-- Topbar Start -->
+    <div class="navbar-custom">
+        <th:block th:replace="/layout/topnav-menu-right :: topnav-menu-right"/>
+
+        <!-- LOGO -->
+        <div class="logo-box">
+            <a href="index.html" class="logo text-center">
+                                <span class="logo-lg">
+                                    <img src="/assets/images/anhlogothegioididong.webp" alt="" height="55">
+                                    <!-- <span class="logo-lg-text-light">Xeria</span> -->
+                                </span>
+                <span class="logo-sm">
+                                    <!-- <span class="logo-sm-text-dark">X</span> -->
+                                    <img src="/assets/images/anhlogothegioididong.webp" alt="" height="24">
+                                </span>
+            </a>
+        </div>
+
+        <th:block th:replace="/layout/topnav-menu-left :: topnav-menu-left"/>
+    </div>
+    <!-- end Topbar -->
+
+    <!-- ========== Left Sidebar Start ========== -->
+    <div class="left-side-menu">
+
+        <div class="slimscroll-menu">
+
+            <!--- Sidemenu -->
+            <th:block th:replace="/layout/sidebar-menu :: sidebar-menu"/>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+
+        </div>
+        <!-- Sidebar -left -->
+
+    </div>
+    <!-- Left Sidebar End -->
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+
+    <div class="content-page">
+        <div class="content">
+
+            <!-- Start Content-->
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Minton</a></li>
+                                    <li class="breadcrumb-item active">Dashboard</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Welcome !</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title"> Danh Sách Người Dùng </h4>
+                                <p class="text-muted font-13 mb-4">
+                                    Bạn muốn mua tivi, bạn muốn mua tủ lạnh, bạn muốn mua điện thoại hãy đến thế giới di động :))
+                                    <code>$().DataTable();</code>.
+                                </p>
+
+                                <table id="tbUser" class="table dt-responsive nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>ID
+                                        <th>Phone</th>
+                                        <th>Username</th>
+                                        <th>Role</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+
+
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+
+                            </div> <!-- end card body-->
+                        </div> <!-- end card -->
+                    </div><!-- end col-->
+                </div>
+                <!-- end row -->
+
+            </div> <!-- container -->
+
+        </div> <!-- content -->
+
+        <!-- Footer Start -->
+        <th:block th:replace="/layout/footer :: footer" />
+        <!-- end Footer -->
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
+
+
+</div>
+<!-- END wrapper -->
+
+<!-- Right Sidebar -->
+
+<th:block th:replace="/layout/script:: script"></th:block>
+<th:block th:replace="/user/modalCreateCustomer :: modalCreate"></th:block>
+<th:block th:replace="/user/modalUpdateCustomer :: modalUpdate"></th:block>
+<script src = "/assets/js/App.js"></script>
+
+
+<script>
+    let page = {
+        urls: {
+            getAllUser: App.BASE_URL_USER,
+            getUserById: App.BASE_URL_USER,
+        },
+        elements: {},
+        loadData: {},
+        commands: {},
+        dialogs: {
+            elements: {},
+            loadData: {},
+            commands: {},
+        },
+        initializeEventControl: {}
+    }
+
+    let user = new User();
+    let role = new Role();
+
+    page.elements.tbUserBody = $("#tbUser tbody");
+
+    page.dialogs.elements.frmUpdate = $("#frmUpdate");
+    page.dialogs.elements.usernameUp = $("#usernameUp");
+    page.dialogs.elements.phoneUp = $("#phoneUp");
+    page.dialogs.elements.roleUp = $("#roleUp");
+
+
+    page.commands.getAllUser = () => {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllUser
+        })
+            .done((data =>{
+                $.each(data, (i, item) => {
+                    user = item;
+                    role = user.role
+
+                    let str =  App.renderRowUser(user, role)
+
+                    page.elements.tbUserBody.append(str)
+
+                })
+
+
+            }))
+
+    }
+
+    function update(){
+        // click
+    }
+
+    page.commands.create
+
+    page.loadData = () => {
+        page.commands.getAllUser();
+    };
+
+    $(() => {
+        page.loadData();
+    });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/v5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="container">
+        <div class="tabs">
+            <ul>
+                <li class="sign_in_li">Sign in</li>
+                <li class="sign_up_li">Sign up</li>
+            </ul>
+        </div>
+        <!--form dang nhap-->
+        <div class="sign_in">
+            <form action="">
+                <div class="icon-button">
+
+                    <span class="facebook"><i class="fa fa-facebook"></i></span>
+
+                    <span class="google"><i class="fa fa-google"></i></span>
+
+
+                </div>
+                <div class="input_field">
+                    <input type="text" placeholder="Username" id="usernameLg" class="input" value="huuQuy">
+                </div>
+                <div class="input_field">
+                    <input type="password" placeholder="Password" id="PasswordLg" class="input" value="123123123">
+                </div>
+                <button class="btn" id="btnLogin" type="button" style="color: rgb(255, 255, 255);display: block; font-size: 16px; font-family: sans-serif;
+                    border: none; margin: 0 auto;">Sign in
+                </button>
+            </form>
+        </div>
+        <!--form dang ky-->
+        <div class="sign_up">
+            <form>
+                <div class="input_field">
+                    <input type="text" placeholder="Username" id="username" name="username" class="input">
+                </div>
+                <div class="input_field">
+                    <input type="text" placeholder="Phone..." id="phone" name="phone" class="input">
+                </div>
+                <div class="input_field">
+                    <input type="text" placeholder="Password" id="password" name="password" class="input">
+                </div>
+                <div class="form-group">
+                    <label for="role">Role group</label>
+                    <select class="form-select" name="role" id="role">
+                        <option value="1">Admin</option>
+                        <option value="2">User</option>
+                    </select>
+                </div>
+                <!--                <div class="btn" id="btnSignup">-->
+                <button class="btn" id="btnSignup" type="button" style="color: rgb(255, 255, 255);display: block; font-size: 16px; font-family: sans-serif;
+                    border: none; margin: 0 auto;">Sign up
+                </button>
+                <!--                </div>-->
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/assets/jquery/jquery-v3.6.0.min.js"></script>
+<script src="/assets/izitoast/v1.4.0/iziToast-1.4.0.js"></script>
+
+<script src="/assets/js/app.js"></script>
+
+<script>
+    $(".sign_up").hide();
+    $(".sign_in_li").addClass("active");
+
+    $(".sign_up_li").click(function () {
+        $(this).addClass("active");
+        $(".sign_in_li").removeClass("active");
+        $(".sign_up").show();
+        $(".sign_in").hide();
+    })
+
+    $(".sign_in_li").click(function () {
+        $(this).addClass("active");
+        $(".sign_up_li").removeClass("active");
+        $(".sign_in").show();
+        $(".sign_up").hide();
+    })
+</script>
+
+<script>
+    const page = {
+        urls: {
+            login: App.BASE_URL_AUTH + "/login",
+            register: App.BASE_URL_AUTH + "/register"
+        },
+        elements: {},
+        commands: {},
+        initializeEventControl: {}
+    }
+
+    page.elements.usernameLogin = $("#usernameLg");
+    page.elements.passwordLogin = $("#PasswordLg");
+    page.elements.btnLogin = $("#btnLogin");
+
+    page.elements.usernameSingnup = $("#username");
+    page.elements.passwordSignup = $("#password");
+    page.elements.phoneSingup = $("#phone");
+    page.elements.role = $("#role");
+    page.elements.btnSingup = $("#btnSignup");
+
+    page.commands.Singup = () => {
+        let user = {
+            "username": page.elements.usernameSingnup.val(),
+            "password": page.elements.passwordSignup.val(),
+            "phone": page.elements.phoneSingup.val(),
+            "role": {
+                "id": page.elements.role.val()
+            }
+        }
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: page.urls.register, // http://localhost:8080/api/auth/register
+            data: JSON.stringify(user)
+        })
+            .done(() => {
+                App.IziToast.showSuccessAlert("Register Successful!");
+            })
+            .fail(() => {
+                App.IziToast.showErrorAlert("Error!")
+            })
+    }
+
+    page.commands.Singin = () => {
+        let user = {
+            "username": page.elements.usernameLogin.val(),
+            "password": page.elements.passwordLogin.val()
+        }
+
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: page.urls.login,
+            data: JSON.stringify(user)
+        })
+            .done(() => {
+                App.IziToast.showSuccessAlert("Signin Success");
+
+                setTimeout(() => {
+                    window.location.href = "/home";
+                }, 1000)
+            })
+            .fail(() => {
+                App.IziToast.showErrorAlert("Login fail");
+            })
+    }
+
+    page.initializeEventControl = () => {
+
+        page.elements.btnSingup.on("click", () => {
+            page.commands.Singup();
+        })
+
+        page.elements.btnLogin.on("click", () => {
+            page.commands.Singin();
+        })
+    }
+
+    $(() => {
+        page.initializeEventControl();
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<th:block th:fragment="sidebar-menu">
+    <div id="sidebar-menu">
+
+        <ul class="metismenu" id="side-menu">
+
+            <li class="menu-title">Navigation</li>
+
+            <li>
+                <a href="javascript: void(0);" class="waves-effect">
+                    <i class="remixicon-dashboard-line"></i>
+                    <span class="badge badge-pink badge-pill float-right">2</span>
+                    <span> Danh Mục  </span>
+                </a>
+                <ul class="nav-second-level" aria-expanded="false">
+                    <li>
+                        <a href="/products"> Danh Sách Sản Phẩm </a>
+                    </li>
+                    <li>
+                        <a href="/users"> Danh Sách Người Dùng </a>
+                    </li>
+                    <li>
+                        <a href="https://www.facebook.com/quy.nguyenhuu.77985"> Thông Tin Liên Hệ  </a>
+                    </li>
+                    <li>
+                        <a href="/com/example/modalCreateCustomer"> Thêm sản phẩm </a>
+                    </li>
+
+                    <li>
+                        <a href="modalCreateCustomer"> Thêm người dùng </a>
+                    </li>
+                    <li>
+                        <a href="/"> Đăng Xuất </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</th:block>
